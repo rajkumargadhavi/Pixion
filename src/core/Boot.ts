@@ -1,19 +1,24 @@
+// Boot.ts
 import { AssetManager } from "./AssetManager";
 import { UIBuilder } from "../ui/UIBuilder";
+import { Application } from "pixi.js";
 
 export class Boot {
-  static async start(app: any) {
-console.log("All assets loaded");
-    // 🔥 Load all assets from LoadConfig.json
+  static async start(app: Application) {
+    // 🔹 Load all assets from LoadConfig.json
     await AssetManager.load("/assets/LoadConfig.json");
-    console.log("All assets loaded");
+    console.log("All assets loaded successfully.");
 
-    // 🔹 Get MainView JSON from cache
-    const MainView = AssetManager.get("ui");
-    if (!MainView) throw new Error("UI JSON not found in cache!");
+    // 🔹 Get UI JSON from cache
+    const layout = AssetManager.get("ui");
+
+    if (!layout) {
+      console.error("UI layout not found in cache!");
+      return;
+    }
 
     // 🔹 Build UI and add to stage
-    const ui = UIBuilder.build(MainView);
+    const ui = UIBuilder.build(layout);
     app.stage.addChild(ui);
   }
 }

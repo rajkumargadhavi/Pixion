@@ -1,4 +1,3 @@
-// AssetManager.ts
 import { Assets } from "pixi.js";
 
 type LoadConfig = {
@@ -8,40 +7,34 @@ type LoadConfig = {
 
 export class AssetManager {
   static async load(configUrl: string) {
-    console.log(configUrl)
-    // Fetch JSON
-    const config: LoadConfig = await fetch(configUrl).then(r => r.json());
-    console.log(config)
-    const keys: string[] = [];
+    const text = await fetch(configUrl).then(r => r.text());
 
-    config.images?.forEach(i => {
-      if (!i.url) {
-        console.error(`Image ${i.name} has no URL!`);
+    const config: LoadConfig = JSON.parse(text);
+
+    const assetsToAdd: Array<{ src: string; alias: string }> = [];
+
+    const addAsset = (name: string, url: string) => {
+      if (!url || typeof url !== "string") {
+        console.error(`❌ Invalid URL for asset "${name}":`, url);
         return;
       }
-      Assets.add({
-        alias: i.name,
-        srcs: Array.isArray(i.url) ? i.url : [i.url], // make sure it's array
-      });
-      keys.push(i.name);
-    });
+      assetsToAdd.push({ src: url, alias: name });
+    };
 
-    config.json?.forEach(j => {
-      if (!j.url) {
-        console.error(`JSON ${j.name} has no URL!`);
-        return;
-      }
-      Assets.add({
-        alias: j.name,
-        srcs: Array.isArray(j.url) ? j.url : [j.url], // array
-      });
-      keys.push(j.name);
-    });
+    config.images?.forEach(img => addAsset(img.name, img.url));
+    config.json?.forEach(js => addAsset(js.name, js.url));
 
-    // Load all assets
-    await Assets.load(keys);
+    console.log("Adding assets to PIXI:", assetsToAdd);
+    Assets.add(assetsToAdd);
 
-    console.log("Assets cached:", keys);
+    const keys = assetsToAdd.map(a => a.alias);
+
+    try {
+      await Assets.load(keys);
+      console.log("Assets loaded:", keys);
+    } catch (err) {
+      console.error("Error loading assets:", err);
+    }
   }
 
   static get<T = any>(key: string): T {

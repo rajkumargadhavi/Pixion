@@ -1,28 +1,34 @@
-import { Application } from "pixi.js";
+// App.ts
+import { Application, VERSION } from "pixi.js";
 import { Boot } from "./core/Boot";
-
 declare global {
   var __PIXI_APP__: Application;
 }
 
 export class App {
   static async start() {
-    // 1️⃣ Create app instance
-    const app = new Application();
 
-    // 2️⃣ Initialize properly (v8+ style)
+    // PIXI version
+    console.log("PIXI Version:", VERSION);
+
+    // Initialize Pixi Application
+    const app = new Application();
     await app.init({
       resizeTo: window,
       backgroundColor: 0x000000,
     });
 
-    // 3️⃣ Append canvas to DOM
-    document.body.appendChild(app.canvas); // v8+ uses app.canvas
+    // Append canvas to DOM
+    document.body.appendChild(app.canvas);
 
-    // 4️⃣ Store globally
     globalThis.__PIXI_APP__ = app;
 
-    // 5️⃣ Start Boot with app
+    // Start Boot process to load assets and build UI
     await Boot.start(app);
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      app.renderer.resize(window.innerWidth, window.innerHeight);
+    });
   }
 }
