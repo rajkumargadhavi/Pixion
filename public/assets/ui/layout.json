@@ -1,24 +1,45 @@
 {
-  "entities":[
-    {
-      "x":0, "y":0, "sdx":-0.5, "sdy":-0.5, "scale":1,
-      "v_x":0, "v_y":0, "v_scale":1, "anchor":0.5,
-      "interactiveChildren":false, "centered":true, "deepPosition":false,
-      "type":"container", "name":"c_game_bg", "debug":0,
-      "entities":[
+    "entities":[
         {
-          "x":0, "y":0,
-          "deepPosition":false,
-          "type":"sprite", "texture":"bg",
-          "name":"s_background", "debug":0
-        },
-        {
-          "x":0, "y":0,
-          "deepPosition":false,
-          "type":"sprite", "texture":"bunny",
-          "name":"s_bunny", "debug":0
+            "type":"container",
+            "name":"c_root",
+            "v_x":0.5,
+            "v_y":0.5,
+            "deepPosition":true,
+            "entities":[
+                {
+                    "x":0,
+                    "y":0,
+                    "type":"sprite",
+                    "name":"s_bg",
+                    "texture":"bg",
+                    "v_x":0,
+                    "v_y":0.20,
+                    "scale":1
+                },
+                {
+                    "x":50,
+                    "y":50,
+                    "v_x":100,
+                    "v_y":100,
+                    "type":"rect",
+                    "name":"r_bg",
+                    "width":50,
+                    "height":50,
+                    "color":"0x1e1e1e",
+                    "alpha":1                    
+                },
+                {
+                    "x":50,
+                    "y":50,
+                    "v_x":100,
+                    "v_y":100,
+                    "type":"sprite",
+                    "name":"s_bunny",
+                    "texture":"bunny",
+                    "scale":0.5
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
