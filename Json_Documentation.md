@@ -15,11 +15,11 @@ This document contains descriptions of unique object types found in GUI configur
 - **rotate** - rotation angle in degrees (number)
 
 ### Adaptive Parameters (for different screen sizes)
-- **v_x, v_y** - adaptive coordinates (number)
-- **v_scale, v_scaleX, v_scaleY** - adaptive scale (number)
-- **v_sdx, v_sdy** - adaptive offsets (number)
-- **v_width, v_height** - adaptive dimensions (number)
-- **v_fontSize** - adaptive font size (number or string)
+- **v_x, v_y** - Mobile adaptive coordinates (number)
+- **v_scale, v_scaleX, v_scaleY** - Mobile adaptive scale (number)
+- **v_sdx, v_sdy** - Mobile adaptive offsets (number)
+- **v_width, v_height** - Mobile adaptive dimensions (number)
+- **v_fontSize** - Mobile adaptive font size (number or string)
 - **max_scale, max_scale_x, max_scale_y** - maximum object size increase from screen size changes
 - **max_scale_limit, max_scale_limit_dx, max_scale_limit_dy** - screen size increase values from default game size (limit on dx dy values up to which scale will increase)
 - **limit_max_x, limit_max_y, limit_min_x, limit_min_y** - maximum and minimum object coordinates to which it will move during adaptation
@@ -91,7 +91,7 @@ This document contains descriptions of unique object types found in GUI configur
 
 **Parameters:**
 - **texture** - texture name (string)
-- **v_texture** - adaptive texture (string)
+- **v_texture** - Mobile adaptive texture (string)
 - **isMask** - whether object is a mask (true/false)
 - **masked** - name of object being masked (string)
 - **loc** - language for localized textures (string)
@@ -365,7 +365,7 @@ This document contains descriptions of unique object types found in GUI configur
 - **hin** - object with advanced font settings
 - **locCheck** - whether to check localization (true/false)
 - **locConfig** - localization configuration for different languages
-- **v_locConst** - adaptive localization constant (string)
+- **v_locConst** - Mobile adaptive localization constant (string)
 - **numberFormat** - whether to format as a number (true/false)
 
 ```json
@@ -833,7 +833,7 @@ This document contains descriptions of unique object types found in GUI configur
 - **interactiveChildren** - whether children can be interactive (true/false)
 - **centered** - whether to center the container (true/false)
 - **cacheAsBitmap** - cache as bitmap (true/false)
-- **portrait** - whether in portrait mode (true/false)
+- **portrait** - whether in portrait mode if true show only in mobile if false then show only in desktop devices (true/false)
 - **screen_height** - screen height to adapt (array)
 - **x_1280, y_1280, texture_1280** - coordinates and textures for resolution 1280
 - **sdx, sdy** - offset along X and Y axes (number)
@@ -939,7 +939,7 @@ This document contains descriptions of unique object types found in GUI configur
 **Parameters:**
 - **minTargetValue, maxTargetValue** - minimum and maximum target values ​​(number)
 - **minSlideValue, maxSlideValue** - minimum and maximum slider values ​​(number)
-- **v_minSlideValue, v_maxSlideValue** - adaptive slider values ​​(number)
+- **v_minSlideValue, v_maxSlideValue** - Mobile adaptive slider values ​​(number)
 - **vertical** - whether the slider is vertical (true/false)
 - **texture** - slider texture (string)
 - **hintAreaRect** - hint area
@@ -1231,8 +1231,8 @@ This document contains descriptions of unique object types found in GUI configur
 - Localization system supports multiple languages through parameters `loc`, `language`, `locConfig`
 
 ### Adaptability
-- Parameters with `v_` prefix (v_x, v_y, v_scale, v_scaleX, v_scaleY, v_sdx, v_sdy, v_width, v_height, v_fontSize) are used for adaptation to different screen sizes
-- These parameters are automatically applied depending on device resolution
+- Parameters with `v_` prefix (v_x, v_y, v_scale, v_scaleX, v_scaleY, v_sdx, v_sdy, v_width, v_height, v_fontSize) are used for Mobile adaptation to different screen sizes
+- These parameters are automatically applied depending on Mobile device resolution
 
 ### Text Objects
 - Support extended font settings and alignment
