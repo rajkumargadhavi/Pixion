@@ -3,14 +3,17 @@ import { UIBuilder } from "../ui/UIBuilder";
 
 export class Boot {
   static async start(app: any) {
+console.log("All assets loaded");
+    // 🔥 Load all assets from LoadConfig.json
+    await AssetManager.load("/assets/LoadConfig.json");
+    console.log("All assets loaded");
 
-    // ✅ CENTRAL LOAD
-    await AssetManager.load("/assets/loadConfig.json");
+    // 🔹 Get MainView JSON from cache
+    const MainView = AssetManager.get("ui");
+    if (!MainView) throw new Error("UI JSON not found in cache!");
 
-    // ✅ JSON CACHE SE
-    const layout = AssetManager.get("ui");
-
-    const ui = UIBuilder.build(layout);
+    // 🔹 Build UI and add to stage
+    const ui = UIBuilder.build(MainView);
     app.stage.addChild(ui);
   }
 }

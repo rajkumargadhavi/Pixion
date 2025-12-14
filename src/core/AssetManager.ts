@@ -1,3 +1,4 @@
+// AssetManager.ts
 import { Assets } from "pixi.js";
 
 type LoadConfig = {
@@ -7,25 +8,45 @@ type LoadConfig = {
 
 export class AssetManager {
   static async load(configUrl: string) {
+    console.log(configUrl)
+    // Fetch JSON
     const config: LoadConfig = await fetch(configUrl).then(r => r.json());
+    console.log(config)
+    const keys: string[] = [];
 
-    const manifest: Record<string, string> = {};
-
-    // 🔹 IMAGES
-    config.images?.forEach(img => {
-      manifest[img.name] = img.url;
+    config.images?.forEach(i => {
+      if (!i.url) {
+        console.error(`Image ${i.name} has no URL!`);
+        return;
+      }
+      Assets.add({
+        alias: i.name,
+        srcs: Array.isArray(i.url) ? i.url : [i.url], // make sure it's array
+      });
+      keys.push(i.name);
     });
 
-    // 🔹 JSON
-    config.json?.forEach(js => {
-      manifest[js.name] = js.url;
+    config.json?.forEach(j => {
+      if (!j.url) {
+        console.error(`JSON ${j.name} has no URL!`);
+        return;
+      }
+      Assets.add({
+        alias: j.name,
+        srcs: Array.isArray(j.url) ? j.url : [j.url], // array
+      });
+      keys.push(j.name);
     });
 
-    // 🔥 THIS IS THE KEY FIX
-    await Assets.load(manifest);
+    // Load all assets
+    await Assets.load(keys);
+
+    console.log("Assets cached:", keys);
   }
 
   static get<T = any>(key: string): T {
-    return Assets.get(key);
+    const asset = Assets.get(key);
+    if (!asset) console.error(`Asset with key "${key}" not found!`);
+    return asset;
   }
 }
