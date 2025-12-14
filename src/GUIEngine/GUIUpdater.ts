@@ -1,49 +1,38 @@
 import { Container } from "pixi.js";
 import { Device } from "./Device";
-// resize + adaptive update
+import { EntityData } from "../ui/types";
+
 export class GUIUpdater {
-  static update(container: Container, dataList: any[]) {
-    dataList.forEach((data, i) => {
-      const obj = container.children[i];
+  static update(container: Container, data: EntityData[]) {
+    const portrait = Device.isPortrait();
+
+    data.forEach((d, i) => {
+      const obj: any = container.children[i];
       if (!obj) return;
 
-      this.apply(obj, data);
+      if (!d.noCheckSize) {
+        obj.x = portrait ? (d.v_x ?? d.x ?? 0) : (d.x ?? 0);
+        obj.y = portrait ? (d.v_y ?? d.y ?? 0) : (d.y ?? 0);
 
+        const sx = portrait
+          ? (d.v_scaleX ?? d.v_scale ?? d.scaleX ?? d.scale ?? 1)
+          : (d.scaleX ?? d.scale ?? 1);
+
+        const sy = portrait
+          ? (d.v_scaleY ?? d.v_scale ?? d.scaleY ?? d.scale ?? 1)
+          : (d.scaleY ?? d.scale ?? 1);
+
+        obj.scale.set(sx, sy);
+      }
+
+      // ✅ RECURSIVE UPDATE
       if (
         obj instanceof Container &&
-        data.entities &&
-        data.deepPosition
+        d.entities &&
+        d.deepPosition !== false
       ) {
-        this.update(obj, data.entities);
+        this.update(obj, d.entities);
       }
     });
-  }
-
-  static apply(obj: any, data: any) {
-    if (data.noCheckSize) return;
-
-    const mobile = Device.isMobile();
-
-    const x = mobile ? data.v_x ?? data.x : data.x;
-    const y = mobile ? data.v_y ?? data.y : data.y;
-
-    obj.x = x ?? 0;
-    obj.y = y ?? 0;
-
-    const scaleX = mobile
-      ? data.v_scaleX ?? data.v_scale ?? data.scaleX ?? data.scale
-      : data.scaleX ?? data.scale;
-
-    const scaleY = mobile
-      ? data.v_scaleY ?? data.v_scale ?? data.scaleY ?? data.scale
-      : data.scaleY ?? data.scale;
-
-    if ((obj as any).scale) {
-      (obj as any).scale.set(scaleX ?? 1, scaleY ?? 1);
-    }
-
-    if (data.alpha !== undefined) {
-      obj.alpha = data.alpha;
-    }
   }
 }

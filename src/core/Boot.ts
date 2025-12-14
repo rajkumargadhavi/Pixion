@@ -1,19 +1,16 @@
 import { AssetManager } from "./AssetManager";
+import { UIBuilder } from "../ui/UIBuilder";
 
 export class Boot {
-  static async start() {
-    // 1️⃣ BootLoad.json load
-    const bootLoad = await fetch("/config/BootLoad.json").then(r => r.json());
+  static async start(app: any) {
 
-    await AssetManager.loadList(bootLoad);
+    // ✅ CENTRAL LOAD
+    await AssetManager.load("/assets/loadConfig.json");
 
-    // 2️⃣ loadConfig.json access
-    const loadConfig = AssetManager.get("loadConfig");
+    // ✅ JSON CACHE SE
+    const layout = AssetManager.get("ui");
 
-    // 3️⃣ Main assets load
-    await AssetManager.loadList(loadConfig.images);
-    await AssetManager.loadList(loadConfig.json);
-
-    console.log("All assets loaded");
+    const ui = UIBuilder.build(layout);
+    app.stage.addChild(ui);
   }
 }

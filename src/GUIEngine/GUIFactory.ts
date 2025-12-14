@@ -1,12 +1,12 @@
 import {
   Container,
   Sprite,
-  Graphics,
-  Assets
+  Graphics
 } from "pixi.js";
-// JSON → Pixi object creation
+import { EntityData } from "../ui/types";
+
 export class GUIFactory {
-  static create(data: any): any {
+  static create(data: EntityData): any {
     if (data.active === false) return null;
 
     let obj: any;
@@ -14,21 +14,19 @@ export class GUIFactory {
     switch (data.type) {
       case "container":
         obj = new Container();
-        obj.interactiveChildren = data.interactiveChildren ?? true;
         break;
 
       case "sprite":
-        obj = Sprite.from(data.texture);
-        obj.anchor?.set(data.anchor ?? 0);
+        obj = Sprite.from(data.texture ?? "");
         break;
 
       case "rect":
-        obj = new Graphics();
-        obj.rect(0, 0, data.width, data.height);
-        obj.fill({
-          color: Number(data.color),
-          alpha: data.alpha ?? 1
-        });
+        obj = new Graphics()
+          .rect(0, 0, data.width ?? 0, data.height ?? 0)
+          .fill({
+            color: Number(data.color),
+            alpha: data.alpha ?? 1,
+          });
         break;
 
       default:
@@ -36,14 +34,14 @@ export class GUIFactory {
         return null;
     }
 
-    obj.name = data.name;
+    obj.label = data.name;
 
-    // children
-    if (data.entities && obj instanceof Container) {
-      data.entities.forEach((c: any) => {
-        const child = GUIFactory.create(c);
-        if (child) obj.addChild(child);
-      });
+    // ✅ CREATE CHILDREN (MOST IMPORTANT)
+    if (obj instanceof Container && data.entities) {
+      for (const child of data.entities) {
+        const childObj = GUIFactory.create(child);
+        if (childObj) obj.addChild(childObj);
+      }
     }
 
     return obj;
