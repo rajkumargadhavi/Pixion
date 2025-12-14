@@ -1,0 +1,18 @@
+{
+  "images": [
+    {
+      "name": "bunny",
+      "url": "/assets/bunny.png"
+    },
+    {
+      "name": "bg",
+      "url": "/assets/Background.jpg"
+    }
+  ],
+  "json": [
+    {
+      "name": "ui",
+      "url": "/assets/ui/layout.json"
+    }
+  ]
+}
